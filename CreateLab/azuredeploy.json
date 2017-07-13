@@ -1,10 +1,18 @@
 {
-    "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentTemplate.json#",
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
         "newLabName": {
-            "type": "string",
-            "defaultValue": "The name of the new lab instance to be created"
+            "type": "string"
+        },
+        "labVmStartupTime": {
+            "type": "string"
+        },
+        "labVmShutDownTime": {
+            "type": "string"
+        },
+        "labVmShutDownURL": {
+            "type": "string"
         }
     },
     "variables": {
@@ -16,9 +24,7 @@
             "type": "Microsoft.DevTestLab/labs",
             "name": "[parameters('newLabName')]",
             "location": "[resourceGroup().location]",
-            "properties": {
-                "labStorageType": "Premium"
-            },
+            "properties": {},
             "resources": [
                 {
                     "apiVersion": "2017-04-26-preview",
@@ -32,13 +38,37 @@
                         "status": "Enabled",
                         "timeZoneId": "Eastern Standard Time",
                         "dailyRecurrence": {
-                            "time": "1900"
+                            "time": "[replace(parameters('labVmShutDownTime'),':','')]"
                         },
                         "taskType": "LabVmsShutdownTask",
                         "notificationSettings": {
                             "status": "Enabled",
                             "timeInMinutes": 15
                         }
+                    }
+                },
+                {
+                    "apiVersion": "2017-04-26-preview",
+                    "type": "schedules",
+                    "name": "LabVmAutoStart",
+                    "location": "[resourceGroup().location]",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.DevTestLab/labs', parameters('newLabName'))]"
+                    ],
+                    "properties": {
+                        "status": "Enabled",
+                        "timeZoneId": "Eastern Standard Time",
+                        "weeklyRecurrence": {
+                        "weekdays": [
+                            "Monday",
+                            "Tuesday",
+                            "Wednesday",
+                            "Thursday",
+                            "Friday"
+                        ],
+                        "time": "[replace(parameters('labVmStartupTime'),':','')]"
+                        },
+                        "taskType": "LabVmsStartupTask"
                     }
                 },
                 {
@@ -62,7 +92,7 @@
                                 "eventName": "Autoshutdown"
                             }
                         ],
-                        "webHookUrl": "http://webhook"
+                        "webHookUrl": "[parameters('labVmShutDownURL')]"
                     },
                     "dependsOn": [
                         "[resourceId('Microsoft.DevTestLab/labs', parameters('newLabName'))]"
