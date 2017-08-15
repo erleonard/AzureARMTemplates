@@ -1,0 +1,7 @@
+{
+  "itemDisplayName": "Create a new lab with auto-start, auto-shutdown and notification email",
+  "description": "This template creates a lab in Azure DevTest Labs and specifies custom startup time, shutdown time and shutdown notification email",
+  "summary": "This template creates a new DevTest Lab instance with auto-start, auto-shutdown and notification email",
+  "githubUsername": "erleonard",
+  "dateUpdated": "2017-08-15"
+}

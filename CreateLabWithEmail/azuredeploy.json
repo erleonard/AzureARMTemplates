@@ -1,0 +1,105 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "newLabName": {
+            "type": "string"
+        },
+        "labVmStartupTime": {
+            "type": "string"
+        },
+        "labVmShutDownTime": {
+            "type": "string"
+        },
+        "labVmShutDownEmail": {
+            "type": "string"
+        }
+    },
+    "variables": {
+    "labVirtualNetworkName": "[concat('VNET-', parameters('newLabName'))]"
+  },
+    "resources": [
+        {
+            "apiVersion": "2017-04-26-preview",
+            "type": "Microsoft.DevTestLab/labs",
+            "name": "[parameters('newLabName')]",
+            "location": "[resourceGroup().location]",
+            "properties": {},
+            "resources": [
+                {
+                    "apiVersion": "2017-04-26-preview",
+                    "type": "schedules",
+                    "name": "LabVmsShutdown",
+                    "location": "[resourceGroup().location]",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.DevTestLab/labs', parameters('newLabName'))]"
+                    ],
+                    "properties": {
+                        "status": "Enabled",
+                        "timeZoneId": "Eastern Standard Time",
+                        "dailyRecurrence": {
+                            "time": "[replace(parameters('labVmShutDownTime'),':','')]"
+                        },
+                        "taskType": "LabVmsShutdownTask",
+                        "notificationSettings": {
+                            "status": "Enabled",
+                            "timeInMinutes": 15
+                        }
+                    }
+                },
+                {
+                    "apiVersion": "2017-04-26-preview",
+                    "type": "schedules",
+                    "name": "LabVmAutoStart",
+                    "location": "[resourceGroup().location]",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.DevTestLab/labs', parameters('newLabName'))]"
+                    ],
+                    "properties": {
+                        "status": "Enabled",
+                        "timeZoneId": "Eastern Standard Time",
+                        "weeklyRecurrence": {
+                        "weekdays": [
+                            "Monday",
+                            "Tuesday",
+                            "Wednesday",
+                            "Thursday",
+                            "Friday"
+                        ],
+                        "time": "[replace(parameters('labVmStartupTime'),':','')]"
+                        },
+                        "taskType": "LabVmsStartupTask"
+                    }
+                },
+                {
+                    "apiVersion": "2017-04-26-preview",
+                    "name": "[variables('labVirtualNetworkName')]",
+                    "type": "virtualNetworks",
+                    "location": "[resourceGroup().location]",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.DevTestLab/labs', parameters('newLabName'))]"
+                    ]
+                },
+                {
+                    "apiVersion": "2017-04-26-preview",
+                    "name": "AutoShutdown",
+                    "type": "notificationChannels",
+                    "location": "[resourceGroup().location]",
+                    "properties": {
+                        "description": "This option will send notifications to the specified email address before auto-shutdown of virtual machines occurs.",
+                        "events": [
+                            {
+                                "eventName": "Autoshutdown"
+                            }
+                        ],
+                        "webHookUrl": null,
+                        "emailRecipient": "[parameters('labVmShutDownEmail')]"
+                    },
+                    "dependsOn": [
+                        "[resourceId('Microsoft.DevTestLab/labs', parameters('newLabName'))]"
+                    ]
+                }
+            ]
+        }
+    ]
+}
