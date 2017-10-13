@@ -1,0 +1,7 @@
+{
+  "itemDisplayName": "Site Recovery Vault Creation",
+  "description": "This template creates a recovery vault for Azure Site Recovery",
+  "summary": "This template creates a recovery vault for Azure Site Recovery",
+  "githubUsername": "erleonard",
+  "dateUpdated": "2017-10-13"
+}
