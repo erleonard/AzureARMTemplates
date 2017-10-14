@@ -1,22 +1,89 @@
 {
-    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-        "VaultName": {
-            "type": "string"
-        }
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "VaultName": {
+      "type": "string"
     },
-    "resources": [
-        {
-            "apiVersion": "2016-06-01",
-            "name": "[parameters('VaultName')]",
-            "location": "[resourceGroup().location]",
-            "type": "Microsoft.RecoveryServices/vaults",
-            "sku": {
-                "name": "RS0",
-                "tier": "Standard"
-            },
-            "properties": {}
-        }
-    ]
+    "ASRVaultSAType": {
+      "type": "string",
+      "defaultValue": "Standard_LRS",
+      "allowedValues": [
+        "Standard_LRS",
+        "Standard_GRS",
+        "Standard_RAGRS",
+        "Premium_LRS"
+      ]
+    },
+    "ASRVaultVNName": {
+      "type": "string",
+      "defaultValue": "ASRVault-VNET-PROD"
+    }
+  },
+  "variables": {
+    "ASRVaultSAName": "[concat('asrvault', uniqueString(resourceGroup().id))]",
+    "ASRVaultVNPrefix": "10.0.0.0/16",
+    "ASRVaultVNSubnet1Name": "Subnet-1",
+    "ASRVaultVNSubnet1Prefix": "10.0.0.0/24",
+    "ASRVaultVNSubnet2Name": "Subnet-2",
+    "ASRVaultVNSubnet2Prefix": "10.0.1.0/24"
+  },
+  "resources": [
+    {
+      "apiVersion": "2016-06-01",
+      "name": "[parameters('VaultName')]",
+      "location": "[resourceGroup().location]",
+      "type": "Microsoft.RecoveryServices/vaults",
+      "sku": {
+        "name": "RS0",
+        "tier": "Standard"
+      },
+      "properties": {}
+    },
+    {
+      "name": "[variables('ASRVaultSAName')]",
+      "type": "Microsoft.Storage/storageAccounts",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2016-01-01",
+      "sku": {
+        "name": "[parameters('ASRVaultSAType')]"
+      },
+      "dependsOn": [],
+      "tags": {
+        "displayName": "[parameters('VaultName')]"
+      },
+      "kind": "Storage"
+    },
+    {
+      "name": "[parameters('ASRVaultVNName')]",
+      "type": "Microsoft.Network/virtualNetworks",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2016-03-30",
+      "dependsOn": [],
+      "tags": {
+        "displayName": "[parameters('VaultName')]"
+      },
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "[variables('ASRVaultVNPrefix')]"
+          ]
+        },
+        "subnets": [
+          {
+            "name": "[variables('ASRVaultVNSubnet1Name')]",
+            "properties": {
+              "addressPrefix": "[variables('ASRVaultVNSubnet1Prefix')]"
+            }
+          },
+          {
+            "name": "[variables('ASRVaultVNSubnet2Name')]",
+            "properties": {
+              "addressPrefix": "[variables('ASRVaultVNSubnet2Prefix')]"
+            }
+          }
+        ]
+      }
+    }
+  ]
 }

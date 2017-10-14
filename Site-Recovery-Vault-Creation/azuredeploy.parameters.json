@@ -1,9 +1,15 @@
 {
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
     "contentVersion": "1.0.0.0",
-    "parameters": {
-        "VaultName": {
-            "value": "ASRvault"
-        }
+  "parameters": {
+    "VaultName": {
+      "value": "ASRvault"
+    },
+    "ASRVaultSAType": {
+      "value": "Standard_LRS"
+    },
+    "ASRVaultVNName": {
+      "value": "ASRVault-VNET-PROD" 
     }
+  }
 }
