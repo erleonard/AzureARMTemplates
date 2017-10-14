@@ -9,6 +9,6 @@ New-AzureRmResourceGroupDeployment -Name ASRDeployment `
                                    -TemplateUri 'https://raw.githubusercontent.com/erleonard/AzureARMTemplates/master/Site-Recovery-Vault-Creation/azuredeploy.json' `
                                    -VaultName 'ASR' `
                                    -ASRVaultVNName 'ASRVault-VNET-PROD' `
-                                   ASRVaultSAType 'Standard_LRS' `
+                                   -ASRVaultSAType 'Standard_LRS' `
                                    -Verbose
 ````
