@@ -8,7 +8,7 @@
         "Visual Studio",
         "Insiders"
     ],
-    "iconUri": "https://github.com/erleonard/AzureARMTemplates/blob/master/AzureDTL/Artifacts/vscode-insiders/insidersgreenwindows.png",
+    "iconUri": "https://github.com/erleonard/AzureARMTemplates/raw/master/AzureDTL/Artifacts/vscode-insiders/insidersgreenwindows.png",
     "targetOsType": "Windows",
     "runCommand": {
         "commandToExecute": "powershell.exe -ExecutionPolicy bypass -File installVSCode.ps1"
