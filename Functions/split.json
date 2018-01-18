@@ -1,0 +1,20 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "firstString": {
+            "type": "string",
+            "defaultValue": "192.168.12.12"
+        }
+    },
+    "variables": {
+        "SeperatedValues": "[split(parameters('firstString'),'.')]"
+    },
+    "resources": [],
+    "outputs": {
+        "concatOutput": {
+            "value": "[concat(variables('SeperatedValues')[0],'.',variables('SeperatedValues')[1],'.13.11')]",
+            "type" : "string"
+        }
+    }
+}

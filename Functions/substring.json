@@ -1,0 +1,24 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "subnetName": {
+            "type": "string",
+            "defaultValue": "subnet0"
+        },
+        "name": {
+            "type": "string",
+            "defaultValue": "VNET"
+        }
+    },
+    "variables": {
+        "subnetModName": "[substring(parameters('subnetName'),0,sub(length(parameters('subnetName')), 1))]"
+    },
+    "resources": [],
+    "outputs": {
+        "concatOutput": {
+            "value": "[concat(parameters('name'),'/',variables('subnetModName'))]",
+            "type" : "string"
+        }
+    }
+}
