@@ -1,0 +1,82 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "name": {
+            "type": "string",
+            "defaultValue": "VNET",
+            "metadata": {
+                "description": "vNet Name"
+              }
+        },
+        "addressPrefix": {
+            "type": "string",
+            "defaultValue": "10.2.0.0/20",
+            "metadata": {
+                "description": "vNet Address prefix"
+              }
+        },
+        "subnetAddressPrefix": {
+            "type": "string",
+            "defaultValue": "10.2.0.0/24",
+            "metadata": {
+                "description": "Subnet Address prefix"
+              }
+        },
+        "subnetCount": {
+            "type": "int",
+            "defaultValue": "2",
+            "minValue": 2,
+            "maxValue": 10,
+            "metadata": {
+                "description": "Number of subnets to deploy, minimum value of 2 and max of 10."
+                }
+            }
+        },
+        "variables": {
+            "subnetName": "subnet0",
+            "subnetModName": "[substring(variables('subnetName'),0,sub(length(variables('subnetName')), 1))]",
+            "SeperatedValues": "[split(parameters('addressPrefix'),'.')]"
+        },
+        "resources": [
+            {
+                "apiVersion": "2017-08-01",
+                "name": "[parameters('name')]",
+                "type": "Microsoft.Network/virtualNetworks",
+                "location": "[resourceGroup().location]",
+                "properties": {
+                    "addressSpace": {
+                        "addressPrefixes": [
+                            "[parameters('addressPrefix')]"
+                        ]
+                    },
+                    "subnets": [
+                        {
+                            "name": "[variables('subnetName')]",
+                            "properties": {
+                                "addressPrefix": "[parameters('subnetAddressPrefix')]"
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "apiVersion": "2017-08-01",
+                "type": "Microsoft.Network/virtualNetworks/subnets",
+                "name": "[concat(parameters('name'),'/',variables('subnetModName'),copyindex(1))]",
+                "location": "[resourceGroup().location]",
+                "properties": {
+                    "addressPrefix": "[concat(variables('SeperatedValues')[0],'.',variables('SeperatedValues')[1],'.', copyIndex(1),'.0/24')]"
+                },
+                "copy": {
+                    "name": "subnetCount",
+                    "count": "[parameters('subnetCount')]",
+                    "mode": "Serial",
+                    "batchSize": 1
+                },
+                "dependsOn": [
+                    "[concat('Microsoft.Network/virtualNetworks/', parameters('name'))]"
+                ]
+            }
+        ]
+    }

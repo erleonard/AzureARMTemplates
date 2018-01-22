@@ -1,0 +1,20 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "addressPrefix": {
+            "type": "string",
+            "defaultValue": "10.2.0.0/24"
+        }
+    },
+    "variables": {
+        "SeperatedValues": "[split(parameters('addressPrefix'),'.')]"
+    },
+    "resources": [],
+    "outputs": {
+        "concatOutput": {
+            "value": "[concat(variables('SeperatedValues')[0],'.',variables('SeperatedValues')[1],'.1.0/24')]",
+            "type" : "string"
+        }
+    }
+}
