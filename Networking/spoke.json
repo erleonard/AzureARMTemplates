@@ -16,6 +16,13 @@
                 "description": "vNet Address prefix"
               }
         },
+        "spokeSubnetName": {
+            "type": "string",
+            "defaultValue": "subnet0",
+            "metadata": {
+                "description": "Subnet name"
+            }
+        },
         "spokeSubnetAddressPrefix": {
             "type": "string",
             "defaultValue": "10.2.0.0/24",
@@ -34,8 +41,7 @@
             }
         },
         "variables": {
-            "subnetName": "subnet0",
-            "subnetModName": "[substring(variables('subnetName'),0,sub(length(variables('subnetName')), 1))]",
+            "subnetModName": "[substring(parameters('spokeSubnetName'),0,sub(length(parameters('spokeSubnetName')), 1))]",
             "SeperatedValues": "[split(parameters('spokeAddressPrefix'),'.')]"
         },
         "resources": [
@@ -52,7 +58,7 @@
                     },
                     "subnets": [
                         {
-                            "name": "[variables('subnetName')]",
+                            "name": "[parameters('spokeSubnetName')]",
                             "properties": {
                                 "addressPrefix": "[parameters('spokeSubnetAddressPrefix')]"
                             }
