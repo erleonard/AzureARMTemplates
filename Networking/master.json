@@ -33,7 +33,7 @@
             "dependsOn": [],
             "properties": {
                 "mode": "Incremental",
-                "templateLik": {
+                "templateLink": {
                     "uri": "[variables('hubTemplateUrl')]",
                     "contentVesion": "1.0.0.0"
                 },
