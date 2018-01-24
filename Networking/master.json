@@ -28,7 +28,7 @@
     "resources": [
         {
             "type": "Microsoft.Resources/deployments",
-            "apiVerson": "2017-05-10",
+            "apiVerson": "2017-08-01",
             "name": "NetworkHubTemplate",
             "dependsOn": [],
             "properties": {
