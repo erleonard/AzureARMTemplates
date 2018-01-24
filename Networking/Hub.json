@@ -1,0 +1,45 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "hubName": {
+            "type": "string",
+            "defaultValue": "HubVNET"
+        },
+        "hubAddressPrefix": {
+            "type": "string",
+            "defaultValue": "10.1.0.0/20"
+        },
+        "hubSubnetName": {
+            "type": "string",
+            "defaultValue": "Default"
+        },
+        "hubSubnetAddressPrefix": {
+            "type": "string",
+            "defaultValue": "10.1.0.0/24"
+        }
+    },
+    "resources": [
+        {
+            "apiVersion": "2017-08-01",
+            "name": "[parameters('hubName')]",
+            "type": "Microsoft.Network/virtualNetworks",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "[parameters('hubAddressPrefix')]"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "[parameters('hubSubnetName')]",
+                        "properties": {
+                            "addressPrefix": "[parameters('hubSubnetAddressPrefix')]"
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}

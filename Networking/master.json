@@ -1,0 +1,57 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "hubName": {
+            "type": "string",
+            "defaultValue": "HubVNET"
+        },
+        "hubAddressPrefix": {
+            "type": "string",
+            "defaultValue": "10.1.0.0/20"
+        },
+        "hubSubnetName": {
+            "type": "string",
+            "defaultValue": "Default"
+        },
+        "hubSubnetAddressPrefix": {
+            "type": "string",
+            "defaultValue": "10.1.0.0/24"
+        }
+    },
+    "variables": {
+        "templateBaseUrl": "https://raw.githubusercontent.com/erleonard/AzureARMTemplates/master/Networking/spoke.json/",
+        "hubTemplateUrl": "[concat(variables('templateBaseUrl'), 'hub.json')]",
+        "spokeTemplateUrl": "[concat(variables('templateBaseUrl'), 'spoke.json')]",
+        "vNetPeeringTemplateUrl": "[concat(variables('templateBaseUrl'), 'vNetPeering.json')]",
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVerson": "2017-05-10",
+            "name": "NetworkHubTemplate",
+            "dependsOn": [],
+            "properties": {
+                "mode": "Incremental",
+                "templateLik": {
+                    "uri": "[variables('hubTemplateUrl')]",
+                    "contentVesion": "1.0.0.0"
+                },
+            "parameters": {
+                "hubName": {
+                    "value": "[parameters('hubName')]"
+                },
+                "hubAddressPrefix": {
+                    "value": "[parameters('hubAddressPrefix')]"
+                },
+                "hubSubnetName": {
+                    "value": "[parameters('hubSubnetName')]"
+                },
+                "hubSubnetAddressPrefix": {
+                    "value": "[parameters('hubSubnetAddressPrefix')]"
+                }
+            }
+            }
+        }
+    ]
+}
