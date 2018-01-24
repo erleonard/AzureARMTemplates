@@ -17,6 +17,22 @@
         "hubSubnetAddressPrefix": {
             "type": "string",
             "defaultValue": "10.1.0.0/24"
+        },
+        "spokeName": {
+            "type": "string",
+            "defaultValue": "HubVNET"
+        },
+        "spokeAddressPrefix": {
+            "type": "string",
+            "defaultValue": "10.1.0.0/20"
+        },
+        "spokeSubnetName": {
+            "type": "string",
+            "defaultValue": "Default"
+        },
+        "spokeSubnetAddressPrefix": {
+            "type": "string",
+            "defaultValue": "10.1.0.0/24"
         }
     },
     "variables": {
@@ -49,6 +65,33 @@
                 },
                 "hubSubnetAddressPrefix": {
                     "value": "[parameters('hubSubnetAddressPrefix')]"
+                }
+            }
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2017-05-10",
+            "name": "NetworkSpokeTemplate",
+            "dependsOn": [],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('spokeTemplateUrl')]",
+                    "contentVesion": "1.0.0.0"
+                },
+            "parameters": {
+                "spokeName": {
+                    "value": "[parameters('spokeName')]"
+                },
+                "spokeAddressPrefix": {
+                    "value": "[parameters('spokeAddressPrefix')]"
+                },
+                "spokeSubnetName": {
+                    "value": "[parameters('spokeSubnetName')]"
+                },
+                "spokeSubnetAddressPrefix": {
+                    "value": "[parameters('spokeSubnetAddressPrefix')]"
                 }
             }
             }
