@@ -20,11 +20,11 @@
         },
         "spokeName": {
             "type": "string",
-            "defaultValue": "HubVNET"
+            "defaultValue": "spokeVNET"
         },
         "spokeAddressPrefix": {
             "type": "string",
-            "defaultValue": "10.1.0.0/20"
+            "defaultValue": "10.2.0.0/20"
         },
         "spokeSubnetName": {
             "type": "string",
@@ -32,7 +32,7 @@
         },
         "spokeSubnetAddressPrefix": {
             "type": "string",
-            "defaultValue": "10.1.0.0/24"
+            "defaultValue": "10.2.0.0/24"
         },
         "spokeSubnetCount": {
             "type": "int",
