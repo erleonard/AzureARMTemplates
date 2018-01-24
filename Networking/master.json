@@ -21,7 +21,7 @@
     },
     "variables": {
         "templateBaseUrl": "https://raw.githubusercontent.com/erleonard/AzureARMTemplates/master/Networking/",
-        "hubTemplateUrl": "[concat(variables('templateBaseUrl'), 'hub.json')]",
+        "hubTemplateUrl": "[concat(variables('templateBaseUrl'), 'Hub.json')]",
         "spokeTemplateUrl": "[concat(variables('templateBaseUrl'), 'spoke.json')]",
         "vNetPeeringTemplateUrl": "[concat(variables('templateBaseUrl'), 'vNetPeering.json')]"
     },
