@@ -28,7 +28,7 @@
         },
         "spokeSubnetName": {
             "type": "string",
-            "defaultValue": "Default"
+            "defaultValue": "subnet0"
         },
         "spokeSubnetAddressPrefix": {
             "type": "string",
