@@ -31,7 +31,7 @@
               }
         },
         "spokeSubnetCount": {
-            "type": "string",
+            "type": "int",
             "defaultValue": "2"
             }
         },

@@ -35,8 +35,8 @@
             "defaultValue": "10.2.0.0/24"
         },
         "spokeSubnetCount": {
-            "type": "string",
-            "defaultValue": 2
+            "type": "int",
+            "defaultValue": "2"
         }
     },
     "variables": {
