@@ -79,7 +79,9 @@
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2017-05-10",
             "name": "NetworkSpokeTemplate",
-            "dependsOn": [],
+            "dependsOn": [
+                "[concat('Microsoft.Resources/deployments/', 'NetworkHubTemplate')]"
+            ],
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
