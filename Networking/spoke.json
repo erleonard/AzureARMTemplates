@@ -4,80 +4,42 @@
     "parameters": {
         "spokeName": {
             "type": "string",
-            "defaultValue": "VNET",
-            "metadata": {
-                "description": "vNet Name"
-              }
+            "defaultValue": "spokeVNET"
         },
         "spokeAddressPrefix": {
             "type": "string",
-            "defaultValue": "10.2.0.0/20",
-            "metadata": {
-                "description": "vNet Address prefix"
-              }
+            "defaultValue": "10.2.0.0/20"
         },
         "spokeSubnetName": {
             "type": "string",
-            "defaultValue": "subnet0",
-            "metadata": {
-                "description": "Subnet name"
-            }
+            "defaultValue": "subnet0"
         },
         "spokeSubnetAddressPrefix": {
             "type": "string",
-            "defaultValue": "10.2.0.0/24",
-            "metadata": {
-                "description": "Subnet Address prefix"
-              }
-        },
-        "spokeSubnetCount": {
-            "type": "int",
-            "defaultValue": "2"
-            }
-        },
-        "variables": {
-            "subnetModName": "[substring(parameters('spokeSubnetName'),0,sub(length(parameters('spokeSubnetName')), 1))]",
-            "SeperatedValues": "[split(parameters('spokeAddressPrefix'),'.')]"
-        },
-        "resources": [
-            {
-                "apiVersion": "2017-06-01",
-                "name": "[parameters('spokeName')]",
-                "type": "Microsoft.Network/virtualNetworks",
-                "location": "[resourceGroup().location]",
-                "properties": {
-                    "addressSpace": {
-                        "addressPrefixes": [
-                            "[parameters('spokeAddressPrefix')]"
-                        ]
-                    },
-                    "subnets": [
-                        {
-                            "name": "[parameters('spokeSubnetName')]",
-                            "properties": {
-                                "addressPrefix": "[parameters('spokeSubnetAddressPrefix')]"
-                            }
-                        }
+            "defaultValue": "10.1.0.0/24"
+        }
+    },
+    "resources": [
+        {
+            "apiVersion": "2017-06-01",
+            "name": "[parameters('spokeName')]",
+            "type": "Microsoft.Network/virtualNetworks",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "[parameters('spokeAddressPrefix')]"
                     ]
-                }
-            },
-            {
-                "apiVersion": "2016-08-01",
-                "type": "Microsoft.Network/virtualNetworks/subnets",
-                "name": "[concat(parameters('spokeName'),'/',variables('subnetModName'),copyindex(1))]",
-                "location": "[resourceGroup().location]",
-                "properties": {
-                    "addressPrefix": "[concat(variables('SeperatedValues')[0],'.',variables('SeperatedValues')[1],'.', copyIndex(1),'.0/24')]"
                 },
-                "copy": {
-                    "name": "subnetCount",
-                    "count": "[parameters('spokeSubnetCount')]",
-                    "mode": "Serial",
-                    "batchSize": 1
-                },
-                "dependsOn": [
-                    "[concat('Microsoft.Network/virtualNetworks/', parameters('spokeName'))]"
+                "subnets": [
+                    {
+                        "name": "[parameters('spokeSubnetName')]",
+                        "properties": {
+                            "addressPrefix": "[parameters('spokeSubnetAddressPrefix')]"
+                        }
+                    }
                 ]
             }
-        ]
-    }
+        }
+    ]
+}
