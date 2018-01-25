@@ -4,7 +4,7 @@
     "parameters": {
         "hubName": {
             "type": "string",
-            "defaultValue": "HubVNET"
+            "defaultValue": "hubVNET"
         },
         "hubAddressPrefix": {
             "type": "string",
@@ -33,10 +33,6 @@
         "spokeSubnetAddressPrefix": {
             "type": "string",
             "defaultValue": "10.2.0.0/24"
-        },
-        "spokeSubnetCount": {
-            "type": "int",
-            "defaultValue": "2"
         }
     },
     "variables": {
@@ -98,9 +94,6 @@
                 },
                 "spokeSubnetAddressPrefix": {
                     "value": "[parameters('spokeSubnetAddressPrefix')]"
-                },
-                "spokeSubnetCount": {
-                    "value": "[parameters('spokeSubnetCount')]"
                 }
             }
             }
