@@ -51,7 +51,7 @@
                 "mode": "Incremental",
                 "templateLink": {
                     "uri": "[variables('hubTemplateUrl')]",
-                    "contentVesion": "1.0.0.0"
+                    "contentVersion": "1.0.0.0"
                 },
             "parameters": {
                 "hubName": {
@@ -80,7 +80,7 @@
                 "mode": "Incremental",
                 "templateLink": {
                     "uri": "[variables('spokeTemplateUrl')]",
-                    "contentVesion": "1.0.0.0"
+                    "contentVersion": "1.0.0.0"
                 },
             "parameters": {
                 "spokeName": {
