@@ -1,0 +1,109 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "hubName": {
+            "type": "string",
+            "defaultValue": "hubVNET"
+        },
+        "hubAddressPrefix": {
+            "type": "string",
+            "defaultValue": "10.1.0.0/20"
+        },
+        "hubSubnetName": {
+            "type": "string",
+            "defaultValue": "Default"
+        },
+        "hubSubnetAddressPrefix": {
+            "type": "string",
+            "defaultValue": "10.1.0.0/24"
+        },
+        "spokeName": {
+            "type": "string",
+            "defaultValue": "spokeVNET"
+        },
+        "spokeAddressPrefix": {
+            "type": "string",
+            "defaultValue": "10.2.0.0/20"
+        },
+        "spokeSubnetName": {
+            "type": "string",
+            "defaultValue": "subnet0"
+        },
+        "spokeSubnetAddressPrefix": {
+            "type": "string",
+            "defaultValue": "10.2.0.0/24"
+        },
+        "spokeSubnetCount": {
+            "type": "int",
+            "defaultValue": "2"
+        }
+    },
+    "variables": {
+        "templateBaseUrl": "https://raw.githubusercontent.com/erleonard/AzureARMTemplates/master/Networking/",
+        "hubTemplateUrl": "[concat(variables('templateBaseUrl'), 'Hub.json')]",
+        "spokeTemplateUrl": "[concat(variables('templateBaseUrl'), 'spoke.json')]",
+        "vNetPeeringTemplateUrl": "[concat(variables('templateBaseUrl'), 'vNetPeering.json')]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2017-05-10",
+            "name": "NetworkHubTemplate",
+            "dependsOn": [],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('hubTemplateUrl')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "hubName": {
+                        "value": "[parameters('hubName')]"
+                    },
+                    "hubAddressPrefix": {
+                        "value": "[parameters('hubAddressPrefix')]"
+                    },
+                    "hubSubnetName": {
+                        "value": "[parameters('hubSubnetName')]"
+                    },
+                    "hubSubnetAddressPrefix": {
+                        "value": "[parameters('hubSubnetAddressPrefix')]"
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2017-05-10",
+            "name": "NetworkSpokeTemplate",
+            "dependsOn": [
+                "[concat('Microsoft.Resources/deployments/', 'NetworkHubTemplate')]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('spokeTemplateUrl')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "spokeName": {
+                        "value": "[parameters('spokeName')]"
+                    },
+                    "spokeAddressPrefix": {
+                        "value": "[parameters('spokeAddressPrefix')]"
+                    },
+                    "spokeSubnetName": {
+                        "value": "[parameters('spokeSubnetName')]"
+                    },
+                    "spokeSubnetAddressPrefix": {
+                        "value": "[parameters('spokeSubnetAddressPrefix')]"
+                    },
+                    "spokeSubnetCount": {
+                        "value": "[parameters('spokeSubnetCount')]"
+                    }
+                }
+            }
+        }
+    ]
+}
