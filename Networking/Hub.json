@@ -4,7 +4,7 @@
     "parameters": {
         "hubName": {
             "type": "string",
-            "defaultValue": "HubVNET"
+            "defaultValue": "hubVNET"
         },
         "hubAddressPrefix": {
             "type": "string",
