@@ -41,6 +41,24 @@
         "description": "The location of resources, such as templates and DSC modules, that the template depends on"
       },
       "defaultValue": "https://raw.githubusercontent.com/erleonard/AzureARMTemplates/master/DuoSecurity/DSC/install-duo.zip"
+    },
+    "IKEY": {
+      "type": "string",
+      "metadata": {
+        "description": "Duo Security IKEY"
+      }
+    },
+      "SKEY": {
+      "type": "string",
+      "metadata": {
+        "description": "Duo Security SKEY"
+      }
+    },
+      "HOST": {
+      "type": "string",
+      "metadata": {
+        "description": "Duo Security host API"
+      }
     }
   },
   "variables": {
@@ -204,7 +222,9 @@
           "ModulesUrl": "[parameters('_artifactsLocation')]",
           "ConfigurationFunction": "install-duo.ps1\\DuoInstall",
           "Properties": {
-            "MachineName": "[variables('vmName')]"
+            "IKEY": "[parameters('IKEY')]",
+            "SKEY": "[parameters('SKEY')]",
+            "HOST": "[parameters('HOST')]"
           }
         },
         "protectedSettings": null
